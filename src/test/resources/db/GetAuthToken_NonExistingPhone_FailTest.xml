@@ -1,0 +1,4 @@
+<dataset>
+    <user id="1" first_name="first" last_name="last" phone_number="2010123456789" country_code="EG"
+          gender="MALE" avatar="avatar" birthdate="1990-10-20"/>
+</dataset>

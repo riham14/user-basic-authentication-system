@@ -6,32 +6,37 @@ import com.user.basic.authentication.exceptions.ErrorException;
 import com.user.basic.authentication.repositories.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Service
 @Transactional
+@Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserServiceHelper userServiceHelper;
 
+
     @Override
-    public UserWebDTO addUser(UserAddDTO userAddDTO) throws Exception {
-        ErrorDTO errorDTO = userServiceHelper.validateUser(userAddDTO);
+    public UserWebDTO addUser(UserAddDTO userAddDTO, MultipartFile avatar) throws Exception {
+        ErrorDTO errorDTO = userServiceHelper.validateUser(userAddDTO, avatar);
 
         if (!errorDTO.hasEmptyLists()) {
             throw new ErrorException(HttpStatus.BAD_REQUEST, errorDTO);
         }
 
         User user = userServiceHelper.getUser(userAddDTO);
+        user.setAvatar(avatar.getBytes());
         return UserWebDTO.from(userRepository.addUser(user));
     }
 

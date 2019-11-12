@@ -37,7 +37,7 @@ public class UserWebDTO {
         userWebDTO.setLast_name(user.getLastName());
         userWebDTO.setCountry_code(user.getCountryCode());
         userWebDTO.setPhone_number(user.getPhoneNumber());
-        userWebDTO.setGender(user.getGender().name().toLowerCase());
+        userWebDTO.setGender(user.getGender().toLowerCase());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String birthdate = simpleDateFormat.format(user.getBirthdate());
         userWebDTO.setBirthdate(birthdate);

@@ -7,13 +7,17 @@ import com.user.basic.authentication.entities.User;
 import com.user.basic.authentication.repositories.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Component
+@Transactional
+@Service
 public class UserServiceHelper {
     public static final int MIN_PHONE_NUMBER_LENGTH = 11;
     public static final int MAX_PHONE_NUMBER_LENGTH = 15;
@@ -23,9 +27,11 @@ public class UserServiceHelper {
     public static final String INVALID_ERROR = "invalid";
 
     @Autowired
+    @Qualifier("userRepository")
     private UserRepository userRepository;
 
-    public ErrorDTO validateUser(UserAddDTO userAddDTO) throws Exception {
+
+    public ErrorDTO validateUser(UserAddDTO userAddDTO, MultipartFile avatar) throws Exception {
         ErrorDTO errorDTO = new ErrorDTO();
         if (Objects.isNull(userAddDTO.getFirst_name()))
             errorDTO.setFirst_name(Collections.singletonList(new ErrorEntry(BLANK_ERROR)));
@@ -45,7 +51,7 @@ public class UserServiceHelper {
             errorDTO.setBirthdate(Collections.singletonList(new ErrorEntry(BLANK_ERROR)));
         }
 
-        if (Objects.isNull(userAddDTO.getAvatar())) {
+        if (Objects.isNull(avatar) || avatar.getBytes().length == 0) {
             errorDTO.setAvatar(Collections.singletonList(new ErrorEntry(BLANK_ERROR)));
         }
 
@@ -81,10 +87,10 @@ public class UserServiceHelper {
         user.setLastName(userAddDTO.getLast_name());
         user.setCountryCode(userAddDTO.getCountry_code());
         user.setPhoneNumber(userAddDTO.getPhone_number().replace("+", ""));
-        user.setGender(userAddDTO.getGender());
+        user.setGender(userAddDTO.getGender().name());
         Date birthdate = getDate(userAddDTO);
         user.setBirthdate(birthdate);
-        user.setAvatar(userAddDTO.getAvatar().getBytes());
+        //user.setAvatar(userAddDTO.getAvatar().getBytes());
         return user;
     }
 

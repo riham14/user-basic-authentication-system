@@ -33,21 +33,21 @@ public class User {
     @Column(name = "country_code", nullable = false)
     private String countryCode;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Column(name = "gender", nullable = false)
-    private GenderEnum gender;
+    private String gender;
 
     @Column(name = "birthdate", nullable = false)
     @Type(type = "date")
     private Date birthdate;
 
     @Lob
-    @Column(name = "avatar", nullable = false)
+    @Column(name = "avatar")
     private byte[] avatar;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")
